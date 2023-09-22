@@ -139,7 +139,7 @@ Run it in the julia REPL using :
 
 `include("first_LP.jl")`
 
-### Final matters (for prof only)
+### Final matters
 BEFORE CLASS ENDS, in the REPL, do this:
 
 `save_REPL_history("Lecture_1_REPL.jl")`
