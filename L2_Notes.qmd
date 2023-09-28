@@ -72,7 +72,9 @@ Go into a Package you own
 type ; vim README.md
 Fix a typo, save and quit
 
-[ to save and quit do this: ESC, then :wq <ENTER>]
+[to save and quit in vim do this: ESC, then :wq <ENTER>]
+
+[can use nano README.md instead]
 
 Commit the file and push to the repo.
 ```{shell}
