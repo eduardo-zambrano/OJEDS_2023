@@ -1,0 +1,276 @@
+---
+title: "ECON 470 Lecture Notes for Meeting Five-Seven"
+format:
+  html:
+    code-fold: true
+---
+
+# Source: https://web.stanford.edu/~boyd/vmls/vmls-julia-companion.pdf
+
+"""
+Chapter 1
+"""
+
+```{julia}
+include("REPL_helper.jl");
+using OhMyREPL
+
+# Vectors
+x = [-1.1, 0.0, 3.6, -7.2]
+length(x)
+
+# Notice: these are not vectors
+
+a = [ 1 2 ]
+
+b = ( 1, 2 )
+
+x[3]
+
+x[3] = 4
+
+x
+
+# Assignment versus copying
+
+x = [ -1.1, 0.0, 3.6, -7.2 ];
+y = x
+x[3] = 4.0
+y #The assignment to x[3] also changes y[3]
+
+y[1] = 2.0
+x
+
+#To create a new copy of an array, the function ```copy``` should be used.
+
+x = [ -1.1, 0.0, 3.6, -7.2 ];
+y = copy(x)
+x[3] = 4.0
+y
+
+# Vector equality
+x = [ -1.1, 0.0, 3.6, -7.2 ];
+y = copy(x)
+y[3] = 4.0
+y == x
+
+#Scalars vs. 1-vectors
+x = [1.3]
+
+y = 1.3
+
+x == y
+
+# Stacked vectors
+x = [ 1,-2]; y = [1,1,0];
+z = [x; y] # Concatenate using semicolon
+
+# These are not stacked vectors:
+z = [x, y]
+z = (x, y)
+
+# Zeros vector
+zeros(3)
+
+#Ones vector
+ones(2)
+
+# Elementary operations
+[0, 7, 3] + [1, 2, 0] 
+[1,9] - [1,1]
+x = [0, 2, -1]
+2.2*x, x*2.2
+x/3
+
+# Broadcasting Instance (Elementwise operations)
+[1.1, -3.7, 0.3] .- 1.4
+
+p_initial = [ 22.15, 89.32, 56.77 ];
+p_final = [ 23.05, 87.32, 57.12 ];
+r = (p_final - p_initial) ./ p_initial
+
+# Linear combination
+a = [1, 2]; b = [ 3, 4]
+α = -0.5; β = 1.5;
+c = α*a + β*b
+
+# Inner product
+x = [-1,2,2];
+y = [1, 0, -3];
+x'*y
+
+```
+"""
+Chapter 3
+"""
+
+```{julia}
+using LinearAlgebra
+
+# Norm
+x = [ 2, -1, 2 ];
+norm(x)
+sqrt(x'*x)
+
+#Triangle inequality
+#Let’s check the triangle inequality, ‖x+ y‖ ≤ ‖x‖+ ‖y‖, for some specific values of x and y.
+x = randn(10); y = randn(10);
+lhs = norm(x+y)
+rhs = norm(x) + norm(y)
+lhs,rhs
+
+# Distance
+u = [1.8, 2.0, -3.7, 4.7];
+v = [0.6, 2.1, 1.9, -1.4];
+w = [2.0, 1.9, -4.0, 4.6];
+norm(u-v), norm(u-w), norm(v-w)
+
+# Function 'coso'
+coso(x,y) =x'*y/(norm(x)*norm(y))
+a = [1,2,-1]; b=[2,0,-3]
+
+coso(a,b)
+```
+
+```{julia}
+"""
+Chapter 5
+"""
+using LinearAlgebra
+# Orthonormal vectors
+a1 = [0,0,-1]; a2 = [1,1,0]/sqrt(2); a3 = [1,-1,0]/sqrt(2);
+
+# Check that these vectors form an orthonormal basis
+norm(a1), norm(a2), norm(a3)
+
+a1'*a2, a1'*a3, a2'*a3
+
+# New vector
+x = [1, 2, 3] 
+
+#Get coefficients of x in orthonormal basis
+β1 = a1'*x
+β2 = a2'*x
+β3 = a3'*x
+
+# Expansion of x in basis
+xexp = β1*a1 + β2*a2 + β3*a3
+
+# Gram-Schimdt algorithm
+
+"""
+Input: an array [a[1], a[2], ..., a[k] ], containing the k vectors a₁,..., aₖ.
+If the vectors are linearly independent, it returns the orthonormal array [q[1], ..., q[k]] 
+If the vectors are linearly dependent and the Gram–Schnidt algorithm terminates early in iteration `i`, 
+it returns the array [q[1], ..., q[i] ] of length i.
+"""
+function gram_schmidt(a; tol = 1e-10)
+    
+    q = []
+    for i = 1:length(a)
+        qtilde = a[i]
+        for j = 1:i-1
+            qtilde -= (q[j]'*a[i]) * q[j]
+        end
+        if norm(qtilde) < tol
+            println("Vectors are linearly dependent.")
+            return q
+        end
+        push!(q, qtilde/norm(qtilde))
+        end;
+    return q
+end
+
+# Example (pp. 100-101)
+a = [ [-1, 1, -1, 1], [-1, 3, -1, 3], [1, 3, 5, 7] ]
+
+q = gram_schmidt(a)
+
+# test orthnormality
+zz=[("norm(q[1]:)",norm(q[1])),
+("q[1]'*q[2]:",q[1]'*q[2]),
+("q[1]'*q[3]:",q[1]'*q[3]),
+("norm(q[2]):",norm(q[2])),
+("q[2]'*q[3]:",q[2]'*q[3]),
+("norm(q[3]):",norm(q[3]))]
+
+# recover a1, a2, a3
+
+a1exp = (q[1]'*a[1]) * q[1]
+
+a2exp = (q[1]'*a[2]) * q[1] + (q[2]'*a[2]) * q[2]
+
+a3exp = (q[1]'a[3]) * q[1] + (q[2]'*a[3]) * q[2] + (q[3]'*a[3]) * q[3]
+
+
+"""
+Example of early termination
+If we replace a3 with a linear combination of a1, and a2, the set becomes linearly dependent.
+"""
+b = [ a[1], a[2], 1.3*a[1] + 0.5*a[2] ]
+
+q = gram_schmidt(b)
+
+# Independence - dimension inequality
+three_two_vectors = [ [1,1], [1,2], [-1,1] ];
+q = gram_schmidt(three_two_vectors)
+
+"""
+```
+References on independence - dimension inequality
+<http://www.efgh.com/math/algebra/vector.htm>
+<https://math.stackexchange.com/questions/3208576/understanding-the-proof-of-independence-dimension-inequality>
+"""
+
+# Code for explaining the usefulness of Gram - Schmidt for DS
+
+using Random, GLM, DataFrames
+
+# Step 1: Generate the Data
+N = 10000
+
+x_0 = ones(N);
+x_1 = randn(N);
+x_2 = randn(N);
+x_3 = randn(N);
+x_4 = randn(N);
+ϵ = randn(N);
+
+y = x_0 .+ x_1 .+ 2 .* x_2 .+ 3 .* x_3 .+ 4 .* x_4 .+ ϵ;
+
+# Step 2: OLS Estimation using Julia Package
+df = DataFrame(y=y, x1=x_1, x2=x_2, x3=x_3, x4=x_4)
+ols_model = lm(@formula(y ~ x1 + x2 + x3 + x4), df)
+
+#println(ols_model)
+
+# Step 3: Run Algorithm 3.1 for Regression by successive orthogonalization
+function regress_orthogonalize(Y, X)
+    N, p = size(X)
+    Z = copy(X)
+    
+    for j in 1:p
+        for k in 1:(j-1)
+            β = (Z[:,j]' * X[:,k]) / (X[:,k]' * X[:,k])
+            Z[:,j] .-= β .* X[:,k]
+        end
+    end
+    
+    β_last = (Z[:,p]' * Y) / (X[:,p]' * X[:,p])
+    return β_last[1] # Extract the scalar from the 1x1 array
+end
+
+β_4 = regress_orthogonalize(y, hcat(x_0, x_1, x_2, x_3, x_4));
+
+println("Estimated β_4 using successive orthogonalization: ", β_4)
+
+
+
+# Remember to 
+1. save the REPL session.
+
+```{julia}
+save_REPL_history("L5_REPL_session.jl")
+```
+
+2. GIT commit and GIT push at the end of class.
