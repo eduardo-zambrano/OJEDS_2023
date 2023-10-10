@@ -3,39 +3,47 @@
 # add GLM
 # <BACKSPACE>
 
-include("REPL_helper.jl")
-using OhMyREPL
 using Random, GLM, DataFrames
-# Step 1: Generate Data
+
+# Code for explaining the usefulness of Gram - Schmidt for DS
+
+using Random, GLM, DataFrames
+
+# Step 1: Generate the Data
 N = 10000
-x_0 = ones(N);
-x_1 = randn(N);
-x_2 = randn(N);
-x_3 = randn(N);
-x_4 = randn(N);
+
+# x_0 is a vector of ones
+x = ones(N, 5);
+for i in 2:5
+    x[:, i] .= randn(N)
+end
+
 ϵ = randn(N);
-y = x_0  + x_1 + 2x_2 + 3x_3 + 4x_4 + ϵ
+y = x[:,1] .+ x[:,2] .+ 2 .* x[:,3] .+ 3 .* x[:,4] .+ 4 .* x[:,5] .+ ϵ;
 
-# Put the data in a data frame
-df = DataFrame(y=y, x1=x_1, x2=x_2, x3=x_3, x4=x_4)
-ols_model = lm(@formula(y ~ x1 + x2 + x3 + x4),df)
+# Step 2: OLS Estimation using Julia Package
+df = DataFrame(y=y, x1=x[:,2], x2=x[:,3], x3=x[:,4], x4=x[:,5])
+ols_model = lm(@formula(y ~ x1 + x2 + x3 + x4), df)
 
-function regress_orthogonalize(Y, X)
-    N, p = size(X)
-    Z = copy(X)
+# Step 3: Run Algorithm 3.1 for Regression by successive orthogonalization
+function regress_orthogonalize(Y, x)
+    N, p = size(x)
+    z = copy(x)
     
     for j in 1:p
         for k in 1:(j-1)
-            β = (Z[:,j]' * X[:,k]) / (X[:,k]' * X[:,k])
-            Z[:,j] .-= β .* X[:,k]
+            γ = (z[:,j]' * z[:,k]) / (z[:,k]' * z[:,k])
+            z[:,j] .-= γ .* z[:,k]
         end
     end
     
-    β_last = (Z[:,p]' * Y) / (X[:,p]' * X[:,p])
-    return β_last[1] # Extract the scalar from the 1x1 array
+    γ_last = (z[:,p]' * Y) / (z[:,p]' * z[:,p])
+    return γ_last[1] # Extract the scalar from the 1x1 array
 end
 
-β_4 = regress_orthogonalize(y,hcat(x_0,x_1,x_2,x_3,x_4))
+γ_4 = regress_orthogonalize(y, x);
+
+println("Estimated γ_4 using successive orthogonalization: ", γ_4)
 
 # Chapter 5 Topics
 using LinearAlgebra
