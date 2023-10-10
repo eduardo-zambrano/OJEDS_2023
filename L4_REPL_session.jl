@@ -1,4 +1,5 @@
 #activate .
+#<BACKSPACE>
 using OhMyREPL
 include("REPL_helper.jl")
 

@@ -1,5 +1,5 @@
 ---
-title: "ECON 470 Lecture Notes for Meeting Five-Seven"
+title: "ECON 470 Lecture Notes for Meetings Five Six"
 format:
   html:
     code-fold: true
