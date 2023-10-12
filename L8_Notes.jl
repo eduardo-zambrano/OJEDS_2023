@@ -266,7 +266,7 @@ y = zeros(N) # space for output
 
 elapsed_seconds_D = @belapsed y = D * x; # fastest
 elapsed_seconds_S = @belapsed y = S * x; # 5× slower
-elapsed_seconds_M = @belapsed y = M * x # >1000× slower!
+elapsed_seconds_M = @belapsed y = M * x; # >1000× slower!
 
 elapsed_nanoseconds_D = elapsed_seconds_D * 1e9
 elapsed_nanoseconds_S = elapsed_seconds_S * 1e9
