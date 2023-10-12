@@ -3,8 +3,6 @@
 # add GLM
 # <BACKSPACE>
 
-using Random, GLM, DataFrames
-
 # Code for explaining the usefulness of Gram - Schmidt for DS
 
 using Random, GLM, DataFrames
@@ -13,13 +11,11 @@ using Random, GLM, DataFrames
 N = 10000
 
 # x_0 is a vector of ones
-x = ones(N, 5);
-for i in 2:5
-    x[:, i] .= randn(N)
-end
+
+x
 
 ϵ = randn(N);
-y = x[:,1] .+ x[:,2] .+ 2 .* x[:,3] .+ 3 .* x[:,4] .+ 4 .* x[:,5] .+ ϵ;
+y = x[:,1] + x[:,2] + 2x[:,3] + 3x[:,4] + 4x[:,5] + ϵ;
 
 # Step 2: OLS Estimation using Julia Package
 df = DataFrame(y=y, x1=x[:,2], x2=x[:,3], x3=x[:,4], x4=x[:,5])
