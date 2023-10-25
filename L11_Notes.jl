@@ -82,7 +82,10 @@ Y = Diagonal(y)
 
 # Emission content of final demand
 
-B*(I-A)^-1 * Y
+round.(B*(I-A)^-1 * Y)
+
+# Compare to the direct content content of final demand
+E
 
 # Private emissions content
 p 
