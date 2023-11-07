@@ -4,7 +4,7 @@ using OhMyREPL
 using VMLS, LinearAlgebra, Plots
 
 # Housing Prices - two features plus the constant term
-D = house_sales_data();
+D = house_sales_data()
 area = D["area"];
 beds = D["beds"];
 price = D["price"];
@@ -22,14 +22,17 @@ plot!(xlabel = "Actual price", ylabel = "Predicted price (simple model)")
 # Housing Prices - Understanding the orthogonalization embedded in least squares (I)
 
 # Preliminaries
-area_hat = (ones(N) \ area) * ones(N);
+area_hat = (ones(N) \ area) * ones(N)
+
 
 # Begin
 r_0 = ones(N);
 
 r_area = area - (r_0 \ area) * r_0
 
-r_beds = beds - (r_0 \ beds) * r_0 - r_area \ beds * r_area ;
+r_area' * r_0
+
+r_beds = beds - (r_0 \ beds) * r_0 - (r_area \ beds) * r_area ;
 
 β_beds = r_beds \ price
 
@@ -43,7 +46,7 @@ beds_resid'*beds_hat
 
 
 # Housing Prices - two features plus the constant term - Cross-validation
-nfold = div(N,5); # size of first four folds
+nfold = div(N,5) # size of first four folds
 import Random
 I = Random.randperm(N); # random permutation of numbers 1...N
 coeff = zeros(5,3); errors = zeros(5,2);
@@ -68,6 +71,7 @@ for k = 1:5
     append!(rms_test, rms(X[Itest,:] * theta - price[Itest]))
     end;
 coeff # 3 coefficients for the five folds
+
 
 [rms_train rms_test] # RMS errors for five folds
 
