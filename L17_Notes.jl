@@ -11,7 +11,7 @@ condo = D["condo"];
 location = D["location"];
 price = D["price"];
 N = size(price)
-X_large = hcat(ones(N), area, max.(area.-1.5, 0), beds, condo, location .== 2, location .== 3, location .== 4 );
+X_large = hcat(ones(N), area, max.(area.-1.5, 0), beds, condo, location .== 2, location .== 3, location .== 4 )
 
 θ = X_large \ price
 
@@ -42,7 +42,7 @@ for j = 1:npts
 end;
 
 # Plot coefficients
-plot(lambdas, thetas', label = ["θ₁" "θ₂" "θ₃" "θ₄" "θ₅" "θ₆" "θ₇" "θ₈"], xscale = :log10)
+plot(lambdas, thetas', label = ["θ₁" "θ₂" "θ₃" "θ₄" "θ₅" "θ₆" "θ₇" "θ₈"], xscale = :log10);
 plot!(xlabel = "lambda", xlim = (1e-6, 1e6))
 
 ## Choosing lambda via cross-validation
