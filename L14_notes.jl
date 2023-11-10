@@ -1,7 +1,7 @@
 # Source: https://web.stanford.edu/~boyd/vmls/vmls-julia-companion.pdf
 include("REPL_helper.jl");
 using OhMyREPL
-using VMLS, LinearAlgebra, Plots
+using VMLS, Plots, Random
 
 # Housing Prices - two features plus the constant term
 D = house_sales_data()
@@ -47,7 +47,6 @@ beds_resid'*beds_hat
 
 # Housing Prices - two features plus the constant term - Cross-validation
 nfold = div(N,5) # size of first four folds
-import Random
 I = Random.randperm(N); # random permutation of numbers 1...N
 coeff = zeros(5,3); errors = zeros(5,2);
 rms_train = zeros(0)
@@ -110,7 +109,7 @@ for k = 1:5
     models[:,k] = θ;
 end;
 # display the eight coefficients for each of the 5 folds 
-models
+# models
 
 
 # Remember to 
