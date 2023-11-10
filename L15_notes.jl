@@ -19,6 +19,9 @@ vdes = 1e3 * ones(m)
 # The unconstrained solution
 x_unc = R \ vdes
 
+Cost_of_unconstrained_solution = sum(x_unc)
+Reduced_Budget = .8 * Cost_of_unconstrained_solution
+
 # The matrix and vector that define the constraint
 S = [1 0 ; 0 1 ; -1 -1 ]
 s = [0 ; 0 ; 1284]
@@ -31,7 +34,8 @@ vdes_R = vdes - R*s
 x_R = A_R \ vdes_R
 x = S*x_R + s
 
-# Source: https://web.stanford.edu/~boyd/vmls/vmls-julia-companion.pdf
+
+
 #   Chapter 17
 #   ============
 # 
