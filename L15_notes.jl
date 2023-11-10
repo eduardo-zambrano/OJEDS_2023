@@ -13,8 +13,8 @@ R = [0.97 1.86 0.41;
     1.10 0.16 0.48;
     1.92 0.22 0.71;
     1.29 0.12 0.62];
-m, n = size(R);
-vdes = 1e3 * ones(m);
+m, n = size(R)
+vdes = 1e3 * ones(m)
 
 # The unconstrained solution
 x_unc = R \ vdes
@@ -30,7 +30,6 @@ vdes_R = vdes - R*s
 # The constrained solution
 x_R = A_R \ vdes_R
 x = S*x_R + s
-
 
 # Source: https://web.stanford.edu/~boyd/vmls/vmls-julia-companion.pdf
 # Also: https://www.cambridge.org/core/elements/machine-learning-for-asset-managers/6D9211305EA2E425D33A9F38D0AE3545, sec 7.6
@@ -48,7 +47,6 @@ x = S*x_R + s
 # Portfolio value with re-investment, return time series r
 cum_value(r) = 10000 * cumprod(1 .+ r)
 
-
 function port_opt(R,rho)
     T, n = size(R)
     if n == 1
@@ -61,12 +59,12 @@ function port_opt(R,rho)
     return w
 end
 
-R, Rtest = portfolio_data();
+R, Rtest = portfolio_data()
 T, n = size(R)
 Ttest, n = size(Rtest)
 
 ρ = 0.10/250; # Ask for 10% annual return
-w = port_opt(R,ρ);
+w = port_opt(R,ρ)
 r = R*w; # Portfolio return time series
 pf_return = 250*mean(r) #Average annual return
 
