@@ -73,9 +73,15 @@ for k = 1:5
     end;
 end;
 
+errorsCV
+# ErrorsCV has 100 rows, one for each model. For each model, ErrorsCV reports the rms out of sample estimated for each of the
+# times the model in that row was estimated. In our case, it was estimated 5 times.
+
 MSE_r = [mean(errorsCV[i, :]) for i in 1:npts]
-plot(lambdas, MSE_r, xscale = :log10);
-plot!(xlabel = "lambda", xlim = (1e-6, 1e6))
+
+# MSE_r is a 100-vector, that reports the average rms across the five folds, for each model. 
+# We can use the entries in MSE_r to choose the model, out of the 100 models, with the lowest rms. That tells us 
+# where the lambda comes from in our multi-criterion least squares problem. 
 
 # Chosen regularization parameter
 lambdas[argmin(MSE_r)]

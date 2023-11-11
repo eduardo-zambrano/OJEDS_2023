@@ -1,7 +1,7 @@
 # Source: https://web.stanford.edu/~boyd/vmls/vmls-julia-companion.pdf
 include("REPL_helper.jl");
 using OhMyREPL
-using VMLS, Plots, Random
+using VMLS, Plots, Random, Statistics
 
 # Housing Prices - two features plus the constant term
 D = house_sales_data()
@@ -73,6 +73,7 @@ coeff # 3 coefficients for the five folds
 
 
 [rms_train rms_test] # RMS errors for five folds
+mean(rms_test)
 
 # Housing Prices - seven features plus the constant term
 condo = D["condo"];
@@ -109,8 +110,10 @@ for k = 1:5
     models[:,k] = θ;
 end;
 # display the eight coefficients for each of the 5 folds 
-# models
+models
 
+errors[2,:]
+mean(errors[2,:])
 
 # Remember to 
 # 1. save the REPL session.
