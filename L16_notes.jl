@@ -188,35 +188,6 @@ plot!(1:Ttest, cum_value(rₚₚ_test), label= "NCO")
 #https://chat.openai.com/share/0ea67557-a3f9-4bf4-a813-2a0bef6ac8dc
 ###
 
-### One more topic
-
-#   14.2 Least squares classifier
-#   –––––––––––––––––––––––––––––––
-#   Iris flower classification. 
-D = iris_data()
-
-# Create 150x4 data matrix
-iris = vcat(D["setosa"], D["versicolor"], D["virginica"])
-
-# y[k] is true (1) if virginica, false (0) otherwise
-y_o = [ zeros(Bool, 50); zeros(Bool, 50); ones(Bool, 50) ]
-y = 2*y_o .-1 # Converting to +1 and -1
-
-# Set up the features matrix
-X = [ ones(150) iris ]
-
-# Train the classifier
-β = X \ y
-f_tilde_X = X*β
-
-y_hat = f_tilde_X .>0
-
-C = confusion_matrix(y_o,y_hat)
-
-# Error rate
-(C[1,2] + C[2,1]) / sum(C)
-
-# See p. 290 
 
 
 save_REPL_history("L16_REPL_session.jl")
