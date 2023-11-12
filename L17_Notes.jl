@@ -2,6 +2,7 @@
 include("REPL_helper.jl");
 using OhMyREPL
 using VMLS, Plots, Random, Statistics
+Random.seed!(123)
 
 # Housing Prices 
 D = house_sales_data();
@@ -83,8 +84,17 @@ MSE_r = [mean(errorsCV[i, :]) for i in 1:npts]
 # We can use the entries in MSE_r to choose the model, out of the 100 models, with the lowest rms. That tells us 
 # where the lambda comes from in our multi-criterion least squares problem. 
 
+# Plot RMS errors
+plot(lambdas, MSE_r, xscale = :log10, label = "Test");
+plot!(xlabel = "lambda", ylabel = "RMS error", xlim = (1e-6, 1e6))
+
 # Chosen regularization parameter
+lowest_MSE_r = minimum(MSE_r)
 lambdas[argmin(MSE_r)]
+
+# Zooming in the RMS plot around the lowest MSE_r and the value of lambda that attains it
+plot(lambdas, MSE_r, label = "Test");
+plot!(xlabel = "lambda", ylabel = "RMS error", xlim = (1,10), ylim = (56,56.5))
 
 # Remember to 
 # 1. save the REPL session.
