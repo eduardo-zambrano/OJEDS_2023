@@ -91,3 +91,56 @@ plot!(x_vals, y_vals, color=:green, label="Decision Boundary");
 
 title!("Points and Linear Classifier Decision Boundary")
 
+
+"""
+Solve the problem using SVM
+"""
+
+using Ipopt
+
+# Function to classify with minimized norm of y
+function linear_classifier_min_norm(a_vectors, b_vectors)
+    # Infer the dimension from the first vector in a_vectors
+    d = size(a_vectors[1], 1)
+
+    model = Model(Ipopt.Optimizer)
+
+    # Define the variables
+    @variable(model, y[1:d])
+    @variable(model, beta)
+
+    # Set the objective to minimize the norm of y
+    @objective(model, Min, sum(y[i]^2 for i in 1:d))
+
+    # Add constraints for a_vectors
+    for a in a_vectors
+        @constraint(model, a' * y + beta >= 1)
+    end
+
+    # Add constraints for b_vectors
+    for b in b_vectors
+        @constraint(model, b' * y + beta <= -1)
+    end
+
+    # Solve the model
+    optimize!(model)
+
+    # Get the solution
+    optimal_y = value.(y)
+    optimal_beta = value(beta)
+
+    return optimal_y, optimal_beta
+end
+
+# Solve using the min norm approach
+y_min_norm, beta_min_norm = linear_classifier_min_norm(a_vectors, b_vectors)
+println("Optimal y (min norm): ", y_min_norm)
+println("Optimal beta (min norm): ", beta_min_norm)
+
+# Plot the decision boundary for the min norm solution
+y_vals_min_norm = (-beta_min_norm .- y_min_norm[1] .* x_vals) ./ y_min_norm[2]
+plot!(x_vals, y_vals_min_norm, color=:purple, label="Min Norm Decision Boundary")
+
+# Display the plot with both decision boundaries
+display(plot)
+
