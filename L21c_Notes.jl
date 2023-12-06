@@ -87,9 +87,9 @@ println("Optimal 'vertical' delta: ", delta/y[2])
 # Plot the decision boundary
 x_vals = minimum([p[1] for p in a_vectors]):0.1:maximum([p[1] for p in b_vectors]);
 y_vals = (-beta .- y[1] .* x_vals) ./ y[2];
-plot!(x_vals, y_vals, aspect_ratio=:equal, color=:green, label="Decision Boundary", xlims=(0, 30), ylims=(0, 30));
+plot!(x_vals, y_vals, color=:green, label="LP Decision Boundary");
 
-title!("Points and Linear Classifier Decision Boundary")
+title!("Linear Classification")
 
 """
 Solve the problem using SVM
