@@ -65,7 +65,7 @@ function linear_classifier(a_vectors, b_vectors)
     # Add constraints for b_vectors
     for b in b_vectors
         @constraint(model, b' * y + beta <=
-         1 - delta)
+         -1 - delta)
     end
 
     # Solve the model
