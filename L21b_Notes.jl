@@ -41,7 +41,7 @@ scatter!(a_x, a_y, color=:blue, label="Group A");
 scatter!(b_x, b_y, color=:red, label="Group B");
 xlabel!("X");
 ylabel!("Y");
-title!("Randomly Generated Points in Groups A and B");
+title!("Randomly Generated Points in Groups A and B")
 
 function linear_classifier_2(a_vectors, b_vectors)
     # Infer dimensions

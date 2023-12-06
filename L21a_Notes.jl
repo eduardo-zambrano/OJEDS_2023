@@ -41,7 +41,7 @@ scatter!(a_x, a_y, color=:blue, label="Group A");
 scatter!(b_x, b_y, color=:red, label="Group B");
 xlabel!("X");
 ylabel!("Y");
-title!("Randomly Generated Points in Groups A and B");
+title!("Randomly Generated Points in Groups A and B")
 
 function linear_classifier(a_vectors, b_vectors)
     # Infer the dimension from the first vector in a_vectors
@@ -80,14 +80,14 @@ function linear_classifier(a_vectors, b_vectors)
 end
 
 y, beta, delta = linear_classifier(a_vectors, b_vectors)
-println("Optimal y: ", y)
-println("Optimal beta: ", beta)
-println("Optimal delta: ", delta)
+println("Optimal 'vertical' y: ", y./y[2])
+println("Optimal 'vertical' beta: ", beta/y[2])
+println("Optimal 'vertical' delta: ", delta/y[2])
 
 # Plot the decision boundary
 x_vals = minimum([p[1] for p in a_vectors]):0.1:maximum([p[1] for p in b_vectors]);
 y_vals = (-beta .- y[1] .* x_vals) ./ y[2];
-plot!(x_vals, y_vals, color=:green, label="Decision Boundary");
+plot!(x_vals, y_vals, aspect_ratio=:equal, color=:green, label="Decision Boundary", xlims=(0, 30), ylims=(0, 30));
 
 title!("Points and Linear Classifier Decision Boundary")
 
